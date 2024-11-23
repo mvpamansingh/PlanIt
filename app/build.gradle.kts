@@ -58,6 +58,11 @@ dependencies {
     debugImplementation(libs.androidx.ui.tooling)
     debugImplementation(libs.androidx.ui.test.manifest)
 
+
+
+    implementation("androidx.compose.material:material-icons-extended:1.5.3")
+
+
     implementation(libs.kotlinx.serialization.json)
     implementation("io.insert-koin:koin-androidx-compose:3.2.0")
 
