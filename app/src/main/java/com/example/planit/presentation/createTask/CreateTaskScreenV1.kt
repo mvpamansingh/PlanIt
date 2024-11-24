@@ -10,7 +10,6 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Button
 import androidx.compose.material3.CircularProgressIndicator
-import androidx.compose.material3.FilterChip
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
@@ -18,11 +17,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
-import com.example.planit.data.local.entity.Priority
 import org.koin.androidx.compose.koinViewModel
-import android.app.DatePickerDialog
-import android.app.TimePickerDialog
-import android.content.Context
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
@@ -31,7 +26,6 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.filled.CalendarMonth
-import androidx.compose.material.icons.filled.KeyboardArrowRight
 import androidx.compose.material.icons.filled.Schedule
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
@@ -46,183 +40,13 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import com.example.planit.presentation.common.AdvancedTimePicker
 import com.example.planit.presentation.common.CustomDatePickerDialog
-import com.example.planit.presentation.common.DateSliderPicker
 import java.text.SimpleDateFormat
 import java.util.*
-
-//@OptIn(ExperimentalMaterial3Api::class)
-//@Composable
-//fun CreateTaskScreenn(
-//    viewModel: CreateTaskViewModel = koinViewModel(),
-//    onNavigateBack: () -> Unit
-//) {
-//    val state = viewModel.state.value
-//    val context = LocalContext.current
-//    var showStartTimePicker by remember { mutableStateOf(false) }
-//    var showDatePicker by remember { mutableStateOf(false) }
-//
-//    Column(
-//        modifier = Modifier
-//            .fillMaxSize()
-//            .background(MaterialTheme.colorScheme.background)
-//    ) {
-//        // Purple Card
-//        Card(
-//            modifier = Modifier
-//                .fillMaxWidth()
-//                .padding(16.dp),
-//            colors = CardDefaults.cardColors(
-//                containerColor = MaterialTheme.colorScheme.primary
-//            ),
-//            shape = RoundedCornerShape(16.dp)
-//        ) {
-//            Column(
-//                modifier = Modifier
-//                    .fillMaxWidth()
-//                    .padding(16.dp)
-//            ) {
-//                Text(
-//                    text = "Task title",
-//                    style = MaterialTheme.typography.labelMedium,
-//                    color = MaterialTheme.colorScheme.onPrimary.copy(alpha = 0.7f)
-//                )
-//
-//                OutlinedTextField(
-//                    value = state.title,
-//                    onValueChange = { viewModel.onEvent(CreateTaskEvent.OnTitleChange(it)) },
-//                    colors = OutlinedTextFieldDefaults.colors(
-//                        unfocusedBorderColor = MaterialTheme.colorScheme.onPrimary.copy(alpha = 0.5f),
-//                        focusedBorderColor = MaterialTheme.colorScheme.onPrimary,
-//                        unfocusedTextColor = MaterialTheme.colorScheme.onPrimary,
-//                        focusedTextColor = MaterialTheme.colorScheme.onPrimary
-//                    ),
-//                    modifier = Modifier.fillMaxWidth()
-//                )
-//
-//                Spacer(modifier = Modifier.height(16.dp))
-//
-//                Text(
-//                    text = "Due date",
-//                    style = MaterialTheme.typography.labelMedium,
-//                    color = MaterialTheme.colorScheme.onPrimary.copy(alpha = 0.7f)
-//                )
-//
-//                Row(
-//                    modifier = Modifier.fillMaxWidth(),
-//                    verticalAlignment = Alignment.CenterVertically,
-//                    horizontalArrangement = Arrangement.spacedBy(8.dp)
-//                ) {
-//                    Icon(
-//                        imageVector = Icons.Default.Schedule,
-//                        contentDescription = "Time",
-//                        tint = MaterialTheme.colorScheme.onPrimary
-//                    )
-//
-//                    Row(
-//                        modifier = Modifier
-//                            .fillMaxWidth()
-//                            .clickable { showDatePicker = true },
-//                        horizontalArrangement = Arrangement.SpaceBetween,
-//                        verticalAlignment = Alignment.CenterVertically
-//                    ) {
-//                        Text(
-//                            text = SimpleDateFormat("MMM dd, yyyy", Locale.getDefault())
-//                                .format(Date(state.date)),
-//                            color = MaterialTheme.colorScheme.onPrimary
-//                        )
-//                        Icon(
-//                            imageVector = Icons.Default.KeyboardArrowRight,
-//                            contentDescription = "Select date",
-//                            tint = MaterialTheme.colorScheme.onPrimary
-//                        )
-//                    }
-//                }
-//            }
-//        }
-//
-//        // Description Section
-//        Column(
-//            modifier = Modifier
-//                .fillMaxWidth()
-//                .padding(16.dp)
-//        ) {
-//            Text(
-//                text = "Descriptions",
-//                style = MaterialTheme.typography.titleMedium,
-//                color = MaterialTheme.colorScheme.onBackground
-//            )
-//
-//            Spacer(modifier = Modifier.height(8.dp))
-//
-//            OutlinedTextField(
-//                value = state.description,
-//                onValueChange = { viewModel.onEvent(CreateTaskEvent.OnDescriptionChange(it)) },
-//                modifier = Modifier.fillMaxWidth(),
-//                minLines = 3,
-//                colors = OutlinedTextFieldDefaults.colors(
-//                    unfocusedBorderColor = MaterialTheme.colorScheme.outline,
-//                    focusedBorderColor = MaterialTheme.colorScheme.primary
-//                )
-//            )
-//
-//            Spacer(modifier = Modifier.height(24.dp))
-//
-//            // Priority Selection
-//            PrioritySelector(
-//                selectedPriority = state.priority,
-//                onPrioritySelected = { priority ->
-//                    viewModel.onEvent(CreateTaskEvent.OnPriorityChange(priority))
-//                }
-//            )
-//        }
-//
-//        // Create Task Button at bottom
-//        Box(
-//            modifier = Modifier
-//                .fillMaxSize()
-//                .padding(16.dp),
-//            contentAlignment = Alignment.BottomCenter
-//        ) {
-//            Button(
-//                onClick = { viewModel.onEvent(CreateTaskEvent.OnCreateTask) },
-//                modifier = Modifier
-//                    .fillMaxWidth(0.7f)
-//                    .height(48.dp),
-//                shape = RoundedCornerShape(24.dp)
-//            ) {
-//                Text("SAVE")
-//            }
-//        }
-//    }
-//
-//    // Dialogs
-//    if (showDatePicker) {
-//        CustomDatePickerDialog(
-//            onDismiss = { showDatePicker = false },
-//            onConfirm = { date ->
-//                viewModel.onEvent(CreateTaskEvent.OnDateChange(date))
-//                showDatePicker = false
-//            },
-//            selectedDate = state.date
-//        )
-//    }
-//
-//    if (state.isLoading) {
-//        CircularProgressIndicator()
-//    }
-//
-//    state.error?.let { error ->
-//        Toast.makeText(context, error, Toast.LENGTH_LONG).show()
-//    }
-//}
-
-
-
 
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun CreateTaskScreenn(
+fun CreateTaskScreenV1(
     viewModel: CreateTaskViewModel = koinViewModel(),
     onNavigateBack: () -> Unit
 ) {
