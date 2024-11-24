@@ -59,6 +59,8 @@ import java.text.SimpleDateFormat
 import java.util.*
 import androidx.compose.foundation.lazy.items
 import androidx.compose.runtime.State
+import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.launch
 
@@ -120,33 +122,62 @@ fun ScheduleScreen(
 
             Spacer(modifier = Modifier.height(24.dp))
 
+            Text(text = "Today tasks", fontSize = 28.sp, fontWeight = FontWeight.Bold, modifier = Modifier.padding(start = 20.dp))
+            Spacer(Modifier.height(17.dp))
             // Tasks List
+
             LazyColumn(
                 modifier = Modifier.fillMaxWidth(),
                 contentPadding = PaddingValues(horizontal = 16.dp),
-                verticalArrangement = Arrangement.spacedBy(8.dp)
+                verticalArrangement = Arrangement.spacedBy(16.dp)
             ) {
-
                 items(
                     items = state.tasks,
                     key = { task -> task.id }
                 ) { task ->
-                    TaskCard(task = task)
+                    val timeFormatter = SimpleDateFormat("h a", Locale.getDefault()) // Simplified time format
+                    Box(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .height(100.dp) // TaskCard height
+                    ) {
+
+                        Text(
+                            text = timeFormatter.format(Date(task.startTime)),
+                            fontSize = 17.sp,
+                            fontWeight = FontWeight.SemiBold,
+                            color = MaterialTheme.colorScheme.onSurface,
+                            modifier = Modifier
+                                .align(Alignment.CenterStart)
+                                .width(60.dp)
+                        )
+
+                        // Task card with offset
+                        TaskCard(
+                            task = task,
+                            modifier = Modifier
+                                .padding(start = 75.dp)
+                                .fillMaxWidth()
+                                .align(Alignment.CenterEnd)
+                        )
+                    }
                 }
             }
         }
     }
 }
 
+
 @Composable
-fun TaskCard(task: TaskEntity) {
+fun TaskCard(
+    task: TaskEntity,
+    modifier: Modifier = Modifier
+) {
     val timeFormatter = SimpleDateFormat("h:mm a", Locale.getDefault())
     val dateFormatter = SimpleDateFormat("MMM dd", Locale.getDefault())
 
     Card(
-        modifier = Modifier
-            .fillMaxWidth()
-            .height(100.dp),
+        modifier = modifier.height(100.dp),
         colors = CardDefaults.cardColors(
             containerColor = MaterialTheme.colorScheme.primaryContainer
         ),
@@ -176,18 +207,26 @@ fun TaskCard(task: TaskEntity) {
                         modifier = Modifier.size(16.dp)
                     )
                     Text(
-                        text = "${timeFormatter.format(Date(task.startTime))} - ${timeFormatter.format(Date(task.endTime))}",
+                        text = "${timeFormatter.format(Date(task.startTime))} - ${
+                            timeFormatter.format(
+                                Date(task.endTime)
+                            )
+                        }",
                         style = MaterialTheme.typography.bodySmall,
                         color = MaterialTheme.colorScheme.onPrimaryContainer.copy(alpha = 0.7f)
                     )
-
                 }
+
                 Spacer(Modifier.height(9.dp))
 
-                Row {
+                Row(
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
                     Icon(
                         imageVector = Icons.Default.CalendarMonth,
-                        contentDescription = ""
+                        contentDescription = null,
+                        tint = MaterialTheme.colorScheme.onPrimaryContainer.copy(alpha = 0.7f),
+                        modifier = Modifier.size(16.dp)
                     )
                     Spacer(Modifier.width(7.dp))
                     Text(
@@ -196,15 +235,7 @@ fun TaskCard(task: TaskEntity) {
                         color = MaterialTheme.colorScheme.onPrimaryContainer.copy(alpha = 0.7f)
                     )
                 }
-
-
             }
-
-//            CircularProgressIndicator(
-//                progress = 0.7f,
-//                modifier = Modifier.size(40.dp),
-//                color = MaterialTheme.colorScheme.primary
-//            )
         }
     }
 }

@@ -65,7 +65,7 @@ fun CreateTaskScreenV1(
         Card(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(16.dp),
+                .padding(1.dp),
             colors = CardDefaults.cardColors(
                 containerColor = MaterialTheme.colorScheme.primary
             ),
