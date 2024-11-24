@@ -24,4 +24,8 @@ interface RoomRepository {
     fun getTasksByPriority(priority: Priority): Flow<List<TaskEntity>>
 
     suspend fun getTaskById(taskId: Long): TaskEntity?
+
+
+
+    fun getTasksForDate(date: Long): Flow<List<TaskEntity>>
 }

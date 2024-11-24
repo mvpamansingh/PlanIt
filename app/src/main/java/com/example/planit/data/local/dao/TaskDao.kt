@@ -75,6 +75,10 @@ interface TaskDao {
     // Get task by id
     @Query("SELECT * FROM tasks WHERE id = :taskId")
     suspend fun getTaskById(taskId: Long): TaskEntity?
+
+
+    @Query("SELECT * FROM tasks WHERE date >= :startDate AND date < :endDate ORDER BY startTime ASC")
+    fun getTasksBetweenDates(startDate: Long, endDate: Long): Flow<List<TaskEntity>>
 }
 
 
