@@ -22,14 +22,16 @@ import java.text.SimpleDateFormat
 import java.util.*
 
 
+
 @Composable
 fun DateSliderPicker(
     onDateSelected: (Long) -> Unit,
     selectedDate: Long = System.currentTimeMillis()
 ) {
     val calendar = Calendar.getInstance()
-    val currentDate = calendar.timeInMillis
-    val dates = remember { generateDateList(currentDate) }
+    val dates = remember(selectedDate) {
+        generateDateList(selectedDate) // Pass selectedDate instead of currentDate
+    }
     val listState = rememberLazyListState()
     val dateFormatter = SimpleDateFormat("dd", Locale.getDefault())
     val dayFormatter = SimpleDateFormat("EEE", Locale.getDefault())
@@ -44,36 +46,39 @@ fun DateSliderPicker(
     ) {
         // Month Year Row
         Row(
-            modifier = Modifier
-                .fillMaxWidth()
-                .clickable { showMonthYearPicker = true },
+            modifier = Modifier.fillMaxWidth(),
             horizontalArrangement = Arrangement.Center,
             verticalAlignment = Alignment.CenterVertically
         ) {
-            Row(
-                modifier = Modifier.wrapContentWidth(),
-                horizontalArrangement = Arrangement.Center,
-                verticalAlignment = Alignment.CenterVertically
+            Box(
+                modifier = Modifier
+                    .clickable { showMonthYearPicker = true }
+                    .padding(8.dp),
+                contentAlignment = Alignment.Center
             ) {
-                Icon(
-                    imageVector = Icons.Default.CalendarMonth,
-                    contentDescription = "Select month and year",
-                    modifier = Modifier.size(24.dp),
-                    tint = MaterialTheme.colorScheme.onSurface
-                )
-                Spacer(modifier = Modifier.width(8.dp))
-                Text(
-                    text = monthFormatter.format(Date(selectedDate)),
-                    style = MaterialTheme.typography.titleMedium,
-                    textAlign = TextAlign.Center,
-                    color = MaterialTheme.colorScheme.onSurface
-                )
+                Row(
+                    horizontalArrangement = Arrangement.Center,
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    Icon(
+                        imageVector = Icons.Default.CalendarMonth,
+                        contentDescription = "Select month and year",
+                        modifier = Modifier.size(24.dp),
+                        tint = MaterialTheme.colorScheme.onSurface
+                    )
+                    Spacer(modifier = Modifier.width(8.dp))
+                    Text(
+                        text = monthFormatter.format(Date(selectedDate)),
+                        style = MaterialTheme.typography.titleMedium,
+                        textAlign = TextAlign.Center,
+                        color = MaterialTheme.colorScheme.onSurface
+                    )
+                }
             }
         }
 
         Spacer(modifier = Modifier.height(24.dp))
 
-        // Date Slider
         LazyRow(
             state = listState,
             horizontalArrangement = Arrangement.spacedBy(8.dp),
@@ -94,12 +99,29 @@ fun DateSliderPicker(
     if (showMonthYearPicker) {
         MonthYearPickerDialog(
             onDismiss = { showMonthYearPicker = false },
-            onConfirm = { newDate -> onDateSelected(newDate) },
+            onConfirm = { newDate ->
+                onDateSelected(newDate)
+                showMonthYearPicker = false
+            },
             initialDate = selectedDate
         )
     }
 }
 
+private fun generateDateList(baseDate: Long): List<Long> {
+    val calendar = Calendar.getInstance()
+    calendar.timeInMillis = baseDate
+    // Keep the selected month and year, just move to -15 days from the current day
+    val currentDay = calendar.get(Calendar.DAY_OF_MONTH)
+    calendar.add(Calendar.DAY_OF_MONTH, -15)
+
+    val dates = mutableListOf<Long>()
+    repeat(31) {
+        dates.add(calendar.timeInMillis)
+        calendar.add(Calendar.DAY_OF_MONTH, 1)
+    }
+    return dates
+}
 @Composable
 private fun DateItem(
     date: Long,
@@ -140,18 +162,6 @@ private fun DateItem(
                 )
         )
     }
-}
-private fun generateDateList(currentDate: Long): List<Long> {
-    val calendar = Calendar.getInstance()
-    calendar.timeInMillis = currentDate
-    calendar.add(Calendar.DAY_OF_YEAR, -15) // Start 15 days before
-
-    val dates = mutableListOf<Long>()
-    repeat(31) { // Show 31 days total
-        dates.add(calendar.timeInMillis)
-        calendar.add(Calendar.DAY_OF_YEAR, 1)
-    }
-    return dates
 }
 
 
