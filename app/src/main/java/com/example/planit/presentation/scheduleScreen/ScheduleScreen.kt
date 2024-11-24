@@ -112,6 +112,9 @@ fun ScheduleScreen(
         ) {
 
 
+
+
+            Spacer(Modifier.height(35.dp))
             // Date Slider
             DateSliderPicker(
                 selectedDate = state.selectedDate,
@@ -122,7 +125,7 @@ fun ScheduleScreen(
 
             Spacer(modifier = Modifier.height(24.dp))
 
-            Text(text = "Today tasks", fontSize = 28.sp, fontWeight = FontWeight.Bold, modifier = Modifier.padding(start = 20.dp))
+            Text(text = "Today tasks", fontSize = 23.sp, fontWeight = FontWeight.Bold, modifier = Modifier.padding(start = 20.dp))
             Spacer(Modifier.height(17.dp))
             // Tasks List
 

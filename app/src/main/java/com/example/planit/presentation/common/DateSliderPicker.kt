@@ -18,6 +18,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -30,7 +31,7 @@ fun DateSliderPicker(
 ) {
     val calendar = Calendar.getInstance()
     val dates = remember(selectedDate) {
-        generateDateList(selectedDate) // Pass selectedDate instead of currentDate
+        generateDateList(selectedDate)
     }
     val listState = rememberLazyListState()
     val dateFormatter = SimpleDateFormat("dd", Locale.getDefault())
@@ -69,9 +70,10 @@ fun DateSliderPicker(
                     Spacer(modifier = Modifier.width(8.dp))
                     Text(
                         text = monthFormatter.format(Date(selectedDate)),
-                        style = MaterialTheme.typography.titleMedium,
+                        fontSize = 28.sp,
+                       // style = MaterialTheme.typography.titleMedium,
                         textAlign = TextAlign.Center,
-                        color = MaterialTheme.colorScheme.onSurface
+                        color = MaterialTheme.colorScheme.onSurface, fontWeight = FontWeight.SemiBold
                     )
                 }
             }
