@@ -77,6 +77,46 @@ import kotlinx.coroutines.launch
 
 
 
+//@Composable
+//private fun PriorityCard(
+//    modifier: Modifier = Modifier,
+//    title: String,
+//    taskCount: Int,
+//    progress: Int,
+//    backgroundColor: Color,
+//    onClick: () -> Unit
+//) {
+//    Card(
+//        modifier = modifier.clickable(onClick = onClick),
+//        colors = CardDefaults.cardColors(containerColor = backgroundColor),
+//        shape = RoundedCornerShape(16.dp)
+//    ) {
+//        Column(
+//            modifier = Modifier.padding(16.dp),
+//            verticalArrangement = Arrangement.spacedBy(8.dp)
+//        ) {
+//            Text(
+//                text = title,
+//                style = MaterialTheme.typography.titleSmall,
+//                color = MaterialTheme.colorScheme.onSurface
+//            )
+//
+//            Text(
+//                text = "$taskCount task",
+//                style = MaterialTheme.typography.bodyMedium,
+//                color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.7f)
+//            )
+//
+//            LinearProgressIndicator(
+//                progress = progress / 100f,
+//                modifier = Modifier.fillMaxWidth(),
+//                color = MaterialTheme.colorScheme.primary,
+//                trackColor = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.1f)
+//            )
+//        }
+//    }
+//}
+
 @Composable
 private fun PriorityCard(
     modifier: Modifier = Modifier,
@@ -86,38 +126,55 @@ private fun PriorityCard(
     backgroundColor: Color,
     onClick: () -> Unit
 ) {
+    val dateFormatter = SimpleDateFormat("dd MMM yyyy", Locale.getDefault())
+    val today = dateFormatter.format(Date())
+
     Card(
         modifier = modifier.clickable(onClick = onClick),
         colors = CardDefaults.cardColors(containerColor = backgroundColor),
         shape = RoundedCornerShape(16.dp)
     ) {
         Column(
-            modifier = Modifier.padding(16.dp),
-            verticalArrangement = Arrangement.spacedBy(8.dp)
+            modifier = Modifier
+                .padding(16.dp)
+                .fillMaxHeight(),
+            verticalArrangement = Arrangement.SpaceBetween
         ) {
-            Text(
-                text = title,
-                style = MaterialTheme.typography.titleSmall,
-                color = MaterialTheme.colorScheme.onSurface
-            )
+            Column(
+                verticalArrangement = Arrangement.spacedBy(8.dp)
+            ) {
+                Text(
+                    text = title,
+                    style = MaterialTheme.typography.titleSmall,
+                    color = MaterialTheme.colorScheme.onSurface
+                )
 
-            Text(
-                text = "$taskCount task",
-                style = MaterialTheme.typography.bodyMedium,
-                color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.7f)
-            )
+                Text(
+                    text = "$taskCount task",
+                    style = MaterialTheme.typography.bodyMedium,
+                    color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.7f)
+                )
+            }
 
-            LinearProgressIndicator(
-                progress = progress / 100f,
-                modifier = Modifier.fillMaxWidth(),
-                color = MaterialTheme.colorScheme.primary,
-                trackColor = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.1f)
-            )
+            Column(
+                verticalArrangement = Arrangement.spacedBy(4.dp)
+            ) {
+                LinearProgressIndicator(
+                    progress = progress / 100f,
+                    modifier = Modifier.fillMaxWidth(),
+                    color = MaterialTheme.colorScheme.primary,
+                    trackColor = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.1f)
+                )
+                Spacer(Modifier.height(10.dp))
+                Text(
+                    text = "Due: $today",
+                    style = MaterialTheme.typography.bodySmall,
+                    color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.7f)
+                )
+            }
         }
     }
 }
-
-
 
 @Composable
 fun PriorityCards(
@@ -134,11 +191,11 @@ fun PriorityCards(
     Row(
         modifier = Modifier
             .fillMaxWidth()
-            .height(200.dp)
+            .height(290.dp)
             .padding(horizontal = 5.dp),
         horizontalArrangement = Arrangement.spacedBy(8.dp)
     ) {
-        // Large card on the left
+
         PriorityCard(
             modifier = Modifier
                 .weight(1f)
