@@ -1,6 +1,8 @@
 package com.example.planit.presentation.common
 
 import com.example.planit.presentation.createTask.CreateTaskViewModel
+import com.example.planit.presentation.homeScreen.HomeScreen
+import com.example.planit.presentation.homeScreen.HomeScreenViewModel
 import com.example.planit.presentation.scheduleScreen.ScheduleViewModel
 import com.example.planit.presentation.test.TaskListViewModel
 import org.koin.androidx.viewmodel.dsl.viewModel
@@ -17,5 +19,9 @@ val presentationModule = module {
 
     viewModel {
         ScheduleViewModel(get())
+    }
+
+    viewModel{
+        HomeScreenViewModel()
     }
 }

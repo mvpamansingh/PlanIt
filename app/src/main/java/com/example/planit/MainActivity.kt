@@ -44,10 +44,13 @@ import androidx.compose.ui.window.Dialog
 import androidx.compose.ui.window.DialogProperties
 import com.example.planit.presentation.common.AdvancedTimePicker
 import com.example.planit.presentation.createTask.CreateTaskScreen
-import com.example.planit.presentation.createTask.CreateTaskScreenn
+import com.example.planit.presentation.createTask.CreateTaskScreenV1
+import com.example.planit.presentation.homeScreen.HomeScreen
+import com.example.planit.presentation.homeScreen.HomeScreenViewModel
 import com.example.planit.presentation.scheduleScreen.ScheduleScreen
 import com.example.planit.presentation.test.TaskListScreen
 import com.example.planit.ui.theme.PlanItTheme
+import org.koin.androidx.compose.koinViewModel
 import java.util.Calendar
 
 class MainActivity : ComponentActivity() {
@@ -59,12 +62,13 @@ class MainActivity : ComponentActivity() {
             PlanItTheme {
                 Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
 
-                    //CreateTaskScreenn {  }
+                  // CreateTaskScreenV1 {  }
                // AdvancedTimePicker(onDismiss = {}, onConfirm = {})
                     //TaskListScreen {  }
-                    ScheduleScreen {  }
+                    //ScheduleScreen {  }
 
-
+                    val viewModel :HomeScreenViewModel = koinViewModel()
+                    HomeScreen(viewModel, onNavigateToCreateTask = {}) { }
                 }
             }
         }
