@@ -55,53 +55,6 @@ class HomeScreenViewModel : ViewModel(), KoinComponent {
         }
     }
 
-//    private fun loadTasks() {
-//        viewModelScope.launch {
-//            _state.value = _state.value.copy(isLoading = true)
-//            try {
-//                repository.getAllTasksByPriority().collect { tasks ->
-//                    val completedTasks = tasks.count { it.isCompleted }
-//                    val progress = if (tasks.isNotEmpty()) {
-//                        (completedTasks * 100) / tasks.size
-//                    } else 0
-//
-//                    _state.value = _state.value.copy(
-//                        tasks = tasks,
-//                        completedTasks = completedTasks,
-//                        totalTasks = tasks.size,
-//                        taskProgress = progress,
-//                        isLoading = false
-//                    )
-//                }
-//            } catch (e: Exception) {
-//                _state.value = _state.value.copy(
-//                    error = e.message,
-//                    isLoading = false
-//                )
-//            }
-//        }
-//    }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 
@@ -129,8 +82,18 @@ class HomeScreenViewModel : ViewModel(), KoinComponent {
                     val mediumPriorityTasks = tasks.filter { it.priority == Priority.MEDIUM }
                     val lowPriorityTasks = tasks.filter { it.priority == Priority.LOW }
 
+                    // Calculate total tasks and completed tasks
+                    val totalTasks = tasks.size
+                    val completedTasks = tasks.count { it.isCompleted }
+                    val taskProgress = if (totalTasks > 0) {
+                        (completedTasks * 100) / totalTasks
+                    } else 0
+
                     _state.value = _state.value.copy(
                         tasks = tasks,
+                        totalTasks = totalTasks,
+                        completedTasks = completedTasks,
+                        taskProgress = taskProgress,
                         highPriorityTasks = highPriorityTasks.size,
                         mediumPriorityTasks = mediumPriorityTasks.size,
                         lowPriorityTasks = lowPriorityTasks.size,
@@ -148,6 +111,7 @@ class HomeScreenViewModel : ViewModel(), KoinComponent {
             }
         }
     }
+
 
 
     private fun calculateProgress(tasks: List<TaskEntity>): Int {

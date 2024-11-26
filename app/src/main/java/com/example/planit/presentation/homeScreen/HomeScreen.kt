@@ -119,18 +119,7 @@ fun HomeScreen(
 
             Spacer(modifier = Modifier.height(24.dp))
 
-//            // Priority Filters
-//            PriorityFilterChips(
-//                selectedPriority = state.selectedPriority,
-//                onPrioritySelected = { priority ->
-//                    when (priority) {
-//                        Priority.HIGH -> viewModel.onEvent(HomeScreenEvents.OnHighPriorityClicked)
-//                        Priority.MEDIUM -> viewModel.onEvent(HomeScreenEvents.OnMediumPriorityClicked)
-//                        Priority.LOW -> viewModel.onEvent(HomeScreenEvents.OnLowPriorityClicked)
-//                    }
-//                },
-//                onClearFilter = { viewModel.onEvent(HomeScreenEvents.OnClearPriorityFilter) }
-//            )
+
             PriorityCards(
                 highPriorityTasks = state.highPriorityTasks,
                 mediumPriorityTasks = state.mediumPriorityTasks,
