@@ -58,6 +58,8 @@ import com.example.planit.presentation.common.DateSliderPicker
 import java.text.SimpleDateFormat
 import java.util.*
 import androidx.compose.foundation.lazy.items
+import androidx.compose.material.icons.filled.CheckCircle
+import androidx.compose.material.icons.filled.CheckCircleOutline
 import androidx.compose.runtime.State
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.sp
@@ -161,7 +163,10 @@ fun ScheduleScreen(
                             modifier = Modifier
                                 .padding(start = 75.dp)
                                 .fillMaxWidth()
-                                .align(Alignment.CenterEnd)
+                                .align(Alignment.CenterEnd),
+                            onTaskComplete = { isCompleted ->
+                                viewModel.onEvent(ScheduleEvent.OnTaskStatusChanged(task.id, isCompleted))
+                            }
                         )
                     }
                 }
@@ -174,7 +179,8 @@ fun ScheduleScreen(
 @Composable
 fun TaskCard(
     task: TaskEntity,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    onTaskComplete: (Boolean) -> Unit = {}
 ) {
     val timeFormatter = SimpleDateFormat("h:mm a", Locale.getDefault())
     val dateFormatter = SimpleDateFormat("MMM dd", Locale.getDefault())
@@ -238,6 +244,24 @@ fun TaskCard(
                         color = MaterialTheme.colorScheme.onPrimaryContainer.copy(alpha = 0.7f)
                     )
                 }
+            }
+
+            IconButton(
+                onClick = { onTaskComplete(!task.isCompleted) }
+            ) {
+                Icon(
+                    imageVector = if (task.isCompleted) {
+                        Icons.Default.CheckCircle
+                    } else {
+                        Icons.Default.CheckCircleOutline
+                    },
+                    contentDescription = if (task.isCompleted) "Mark incomplete" else "Mark complete",
+                    tint = if (task.isCompleted) {
+                        MaterialTheme.colorScheme.primary
+                    } else {
+                        MaterialTheme.colorScheme.onPrimaryContainer.copy(alpha = 0.7f)
+                    }
+                )
             }
         }
     }

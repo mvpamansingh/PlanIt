@@ -69,6 +69,7 @@ import androidx.compose.runtime.State
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewModelScope
+import com.example.planit.presentation.scheduleScreen.ScheduleEvent
 import com.example.planit.presentation.scheduleScreen.TaskCard
 import kotlinx.coroutines.launch
 
@@ -157,10 +158,10 @@ fun HomeScreen(
             ) {
                 items(state.tasks) { task ->
                     TaskCard(
-                        task = task,
-                       // onTaskStatusChanged = { isCompleted ->
-                          //  viewModel.onEvent(HomeScreenEvents.OnTaskStatusChanged(task.id, isCompleted))
-                        //}
+                        task = task, onTaskComplete = { isCompleted->
+                            viewModel.onEvent(HomeScreenEvents.OnTaskStatusChanged(taskId =task.id  , isCompleted = isCompleted))
+                        }
+
                     )
                 }
             }

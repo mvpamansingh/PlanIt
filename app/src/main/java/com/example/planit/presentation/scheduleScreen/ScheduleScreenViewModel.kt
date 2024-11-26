@@ -29,6 +29,10 @@ class ScheduleViewModel(
             ScheduleEvent.LoadTasks -> {
                 loadTasksForSelectedDate()
             }
+
+            is ScheduleEvent.OnTaskStatusChanged -> {
+                updateTaskStatusChanged(event.taskId,event.isCompleted)
+            }
         }
     }
 
@@ -48,6 +52,29 @@ class ScheduleViewModel(
                     isLoading = false
                 )
             }
+        }
+    }
+
+    private fun updateTaskStatusChanged(taskId:Long, isCompleted:Boolean)
+    {
+        viewModelScope.launch {
+
+            try {
+                val task = repository.getTaskById(taskId)
+                task?.let {
+                    val updatedTask = it.copy(isCompleted = isCompleted)
+                    repository.updateTask(updatedTask)
+                }
+            }
+            catch (e:Exception)
+            {
+
+                _state.value=  _state.value.copy(
+                    error = e.message
+                )
+
+            }
+
         }
     }
 }
