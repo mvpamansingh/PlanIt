@@ -4,6 +4,7 @@ import com.example.planit.presentation.createTask.CreateTaskViewModel
 import com.example.planit.presentation.homeScreen.HomeScreen
 import com.example.planit.presentation.homeScreen.HomeScreenViewModel
 import com.example.planit.presentation.priorityScreen.LowPriority.LowPriorityViewModel
+import com.example.planit.presentation.priorityScreen.MediumPriority.MediumPriorityViewModel
 import com.example.planit.presentation.priorityScreen.highPriority.HighPriorityViewModel
 import com.example.planit.presentation.scheduleScreen.ScheduleViewModel
 import com.example.planit.presentation.test.TaskListViewModel
@@ -35,5 +36,9 @@ val presentationModule = module {
 
     viewModel {
         LowPriorityViewModel()
+    }
+
+    viewModel {
+        MediumPriorityViewModel()
     }
 }
